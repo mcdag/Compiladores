@@ -7,7 +7,7 @@ public class RPN {
 	public static void main(String[] args) throws FileNotFoundException {
 		LinkedList<Token> queue = new LinkedList<>();
 
-		String line;
+		String line = "";
 		Token token;
 		double result;
 
@@ -50,7 +50,7 @@ public class RPN {
 			resultFile.close();
 			
 		} catch (Exception e) {
-			System.out.println("Error: Unexpected character");
+			System.out.println("Error: Unexpected character: " + line);
 
 		} finally {
 			in.close();
