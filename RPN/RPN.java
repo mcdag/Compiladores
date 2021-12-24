@@ -6,6 +6,11 @@ import java.io.*;
 public class RPN {
 	public static void main(String[] args) throws FileNotFoundException {
 		LinkedList<Token> queue = new LinkedList<>();
+		HashMap<String, Double> ids = new HashMap<String, Double>();
+		
+		ids.put("x", 1.0);
+		ids.put("y", 2.0);
+		ids.put("z", 3.0);
 
 		String line = "";
 		Token token;
@@ -38,6 +43,8 @@ public class RPN {
 						token = new Token(TokenType.SLASH, line);
 					}else if(line.equals("*")) {
 						token = new Token(TokenType.STAR, line);
+					} else if(line.equals("x") || line.equals("y") || line.equals("z")) {
+						token = new Token(TokenType.ID, line);
 					} else {
 						throw new Exception();
 					}
@@ -45,7 +52,7 @@ public class RPN {
 				}
 			}
 
-			result = getResult(queue);
+			result = getResult(queue, ids);
 			writeFile.printf("result: " + result);
 			resultFile.close();
 			
@@ -66,7 +73,7 @@ public class RPN {
 		}
 	}
 
-	public static double getResult(LinkedList<Token> queue) throws Exception {
+	public static double getResult(LinkedList<Token> queue, HashMap<String, Double> ids) throws Exception {
 		Stack<Double> stack = new Stack<Double>();
 		double result, first, second;
 
@@ -77,6 +84,8 @@ public class RPN {
 
 			if(line.type == TokenType.NUM) {
 				stack.push(Double.parseDouble(line.lexeme));
+			}else if(line.type == TokenType.ID){
+				stack.push(ids.get(line.lexeme));
 			}else {
 				if (stack.size() < 2) {
 					throw new Exception();
